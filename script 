@@ -1,0 +1,30 @@
+# Archivo: .github/workflows/ci.yml
+name: CI Pipeline for evoMatrixChat
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v2
+
+      - name: Configurar entorno Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Ejecutar pruebas unitarias
+        run: pytest
+
+      - name: Análisis de código (Linting)
+        run: flake8 .
+
+      - name: Desplegar en entorno de prueba
+        run: |
+          # Comandos para desplegar en el servidor de pruebas
+          echo "Despliegue en entorno de prueba completado"
