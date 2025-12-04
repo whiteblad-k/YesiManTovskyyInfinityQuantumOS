@@ -32,7 +32,9 @@
             "console": "integratedTerminal",
             "justMyCode": true,
             "env": {
-                "PYTHONPATH": "${workspaceFolder}"
+                "PYTHONPATH": "${workspaceFolder}",
+                "DISPOSITIVO": "${env:DISPOSITIVO}",
+                "USUARIO": "${env:USUARIO}"
             }
         },
         {
