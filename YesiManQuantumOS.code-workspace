@@ -1,0 +1,127 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+		"python.terminal.activateEnvironment": true,
+		"python.analysis.typeCheckingMode": "basic",
+		"python.linting.enabled": true,
+		"python.linting.pylintEnabled": true,
+		"python.linting.flake8Enabled": true,
+		"python.formatting.provider": "black",
+		"editor.formatOnSave": true,
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": "explicit"
+		},
+		"files.exclude": {
+			"**/__pycache__": true,
+			"**/*.pyc": true,
+			"**/.pytest_cache": true,
+			"**/.venv": false,
+			"**/venv": true
+		},
+		"search.exclude": {
+			"**/.venv": true,
+			"**/venv": true,
+			"**/__pycache__": true,
+			"**/.pytest_cache": true
+		},
+		"git.ignoreLimitWarning": true,
+		"github.copilot.enable": {
+			"*": true,
+			"python": true,
+			"plaintext": false,
+			"markdown": true
+		},
+		"terminal.integrated.env.linux": {
+			"PYTHONPATH": "${workspaceFolder}"
+		},
+		"terminal.integrated.env.osx": {
+			"PYTHONPATH": "${workspaceFolder}"
+		},
+		"terminal.integrated.env.windows": {
+			"PYTHONPATH": "${workspaceFolder}"
+		}
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-python.python",
+			"ms-python.vscode-pylance",
+			"ms-python.black-formatter",
+			"ms-python.isort",
+			"ms-python.flake8",
+			"ms-toolsai.jupyter",
+			"github.copilot",
+			"github.copilot-chat",
+			"donjayamanne.githistory",
+			"eamodio.gitlens",
+			"mhutchie.git-graph",
+			"visualstudioexptteam.vscodeintellicode",
+			"visualstudioexptteam.intellicode-api-usage-examples",
+			"streetsidesoftware.code-spell-checker",
+			"streetsidesoftware.code-spell-checker-spanish",
+			"redhat.vscode-yaml",
+			"esbenp.prettier-vscode"
+		]
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Python: Activar Sistema",
+				"type": "debugpy",
+				"request": "launch",
+				"program": "${workspaceFolder}/activar.py",
+				"console": "integratedTerminal",
+				"justMyCode": true
+			},
+			{
+				"name": "Python: IA Script",
+				"type": "debugpy",
+				"request": "launch",
+				"program": "${workspaceFolder}/IA-script.py",
+				"console": "integratedTerminal",
+				"justMyCode": true,
+				"env": {
+					"OPENAI_API_KEY": "${env:OPENAI_API_KEY}"
+				}
+			},
+			{
+				"name": "Python: Archivo Actual",
+				"type": "debugpy",
+				"request": "launch",
+				"program": "${file}",
+				"console": "integratedTerminal",
+				"justMyCode": true
+			}
+		]
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "Instalar dependencias",
+				"type": "shell",
+				"command": "${workspaceFolder}/.venv/bin/pip install -r requirements.txt",
+				"problemMatcher": []
+			},
+			{
+				"label": "Formatear código",
+				"type": "shell",
+				"command": "${workspaceFolder}/.venv/bin/black",
+				"args": ["${workspaceFolder}"],
+				"problemMatcher": []
+			},
+			{
+				"label": "Ejecutar tests",
+				"type": "shell",
+				"command": "${workspaceFolder}/.venv/bin/pytest",
+				"args": ["-v"],
+				"problemMatcher": []
+			}
+		]
+	}
+}
