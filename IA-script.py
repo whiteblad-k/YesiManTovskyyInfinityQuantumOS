@@ -23,7 +23,21 @@ def analizar_logs(logs):
     return errores
 
 def generar_correccion(error_descripcion):
-    """Genera una corrección usando OpenAI API (nueva versión)."""
+    """
+    Genera una corrección de código usando la API de OpenAI.
+    
+    Args:
+        error_descripcion (str): Descripción del error incluyendo timestamp,
+                                mensaje y contexto.
+    
+    Returns:
+        str: Código corregido sugerido por el modelo de IA o mensaje de error
+             si la generación falla.
+    
+    Raises:
+        Exception: Captura cualquier error de la API y retorna un mensaje
+                  descriptivo en lugar de propagar la excepción.
+    """
     prompt = f"Analiza el siguiente error y sugiere una corrección en el código:\n\n{error_descripcion}\n\nCódigo corregido:"
     
     try:

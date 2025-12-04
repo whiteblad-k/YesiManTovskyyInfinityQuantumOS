@@ -11,7 +11,16 @@ from datetime import datetime
 
 
 def verificar_entorno():
-    """Verifica que el entorno esté configurado correctamente."""
+    """
+    Verifica que el entorno esté configurado correctamente.
+    
+    Comprueba que las variables de entorno críticas estén definidas.
+    Imprime mensajes informativos sobre el estado de la configuración.
+    
+    Returns:
+        bool: True si todas las variables requeridas están configuradas,
+              False en caso contrario.
+    """
     print("🔍 Verificando configuración del entorno...")
     
     # Verificar variables de entorno críticas
