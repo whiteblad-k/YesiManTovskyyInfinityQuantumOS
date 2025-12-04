@@ -4,7 +4,8 @@
         {
             "label": "Crear entorno virtual Python",
             "type": "shell",
-            "command": "python3 -m venv .venv",
+            "command": "python",
+            "args": ["-m", "venv", ".venv"],
             "problemMatcher": [],
             "presentation": {
                 "echo": true,

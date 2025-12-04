@@ -105,21 +105,22 @@
 			{
 				"label": "Instalar dependencias",
 				"type": "shell",
-				"command": "${workspaceFolder}/.venv/bin/pip install -r requirements.txt",
+				"command": "python",
+				"args": ["-m", "pip", "install", "-r", "requirements.txt"],
 				"problemMatcher": []
 			},
 			{
 				"label": "Formatear código",
 				"type": "shell",
-				"command": "${workspaceFolder}/.venv/bin/black",
-				"args": ["${workspaceFolder}"],
+				"command": "python",
+				"args": ["-m", "black", "${workspaceFolder}"],
 				"problemMatcher": []
 			},
 			{
 				"label": "Ejecutar tests",
 				"type": "shell",
-				"command": "${workspaceFolder}/.venv/bin/pytest",
-				"args": ["-v"],
+				"command": "python",
+				"args": ["-m", "pytest", "-v"],
 				"problemMatcher": []
 			}
 		]

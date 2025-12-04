@@ -10,7 +10,8 @@ def test_import_activar():
     """Verifica que el módulo activar se puede importar."""
     try:
         import activar
-        assert True
+        # Verificar que el módulo tiene los elementos esperados
+        assert hasattr(activar, 'datos_activacion')
     except ImportError as e:
         pytest.fail(f"No se pudo importar activar: {e}")
 
@@ -19,7 +20,9 @@ def test_import_script():
     """Verifica que el módulo script se puede importar."""
     try:
         import script
-        assert True
+        # Verificar que el módulo tiene las funciones esperadas
+        assert hasattr(script, 'verificar_entorno')
+        assert hasattr(script, 'main')
     except ImportError as e:
         pytest.fail(f"No se pudo importar script: {e}")
 
