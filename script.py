@@ -48,10 +48,13 @@ def ejecutar_diagnostico():
     """Ejecuta un diagnóstico básico del sistema."""
     print("🔬 Ejecutando diagnóstico del sistema...\n")
     
+    # Verificar entorno una sola vez
+    env_ok = verificar_entorno()
+    
     diagnosticos = {
         "Python": sys.version.split()[0],
         "Sistema Operativo": os.name,
-        "Variables de entorno": "✅" if verificar_entorno() else "❌",
+        "Variables de entorno": "✅" if env_ok else "❌",
         "Modo Debug": os.getenv("DEBUG", "False"),
         "Nivel de Log": os.getenv("LOG_LEVEL", "INFO"),
     }
