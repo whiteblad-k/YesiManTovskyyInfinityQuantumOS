@@ -1,5 +1,60 @@
 # YesiManTovskyyInfinityQuantumOS
-YesiMan Tovskyy Infinity Quantum OS es un sistema operativo innovador diseñado para operar en un entorno cuántico. Combina cifrado avanzado, autenticación biométrica cuántica y una arquitectura de seguridad autoevolutiva
+
+YesiMan Tovskyy Infinity Quantum OS es un sistema operativo innovador diseñado para operar en un entorno cuántico. Combina cifrado avanzado, autenticación biométrica cuántica y una arquitectura de seguridad autoevolutiva.
+
+## 🚀 Inicio Rápido - Integración con Visual Studio Code
+
+### Configurar en 5 minutos
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone https://github.com/whiteblad-k/YesiManTovskyyInfinityQuantumOS.git
+   cd YesiManTovskyyInfinityQuantumOS
+   code .
+   ```
+
+2. **Crear entorno virtual:**
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # Linux/macOS
+   .venv\Scripts\activate     # Windows
+   ```
+
+3. **Instalar dependencias:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Configurar variables de entorno:**
+   ```bash
+   cp .env.example .env
+   # Editar .env con tus credenciales
+   ```
+
+5. **Instalar extensiones recomendadas de VS Code** (VS Code te lo sugerirá automáticamente)
+
+### 📚 Documentación de Integración
+
+- **[QUICKSTART.md](QUICKSTART.md)** - Guía rápida de inicio (5 minutos)
+- **[INTEGRACION_VSCODE.md](INTEGRACION_VSCODE.md)** - Guía completa de integración con VS Code y agentes de IA
+- **[SETUP_DESARROLLO.md](SETUP_DESARROLLO.md)** - Configuración detallada del entorno de desarrollo
+
+### 🤖 Integración con Agentes de IA
+
+Este proyecto está optimizado para trabajar con **GitHub Copilot** como agente automatizado:
+
+- Autocompletado inteligente de código
+- Generación de código mediante comentarios descriptivos
+- Copilot Chat para consultas y explicaciones
+- Debugging asistido por IA
+- Generación automática de tests
+
+Ver [INTEGRACION_VSCODE.md](INTEGRACION_VSCODE.md) para más detalles sobre cómo usar agentes de IA en tu desarrollo.
+
+---
+
+## Sobre el Proyecto
+
 YesiMan Tovskyy Infinity Quantum OS
 1. Portada
 Proyecto: YesiMan Tovskyy Infinity Quantum OS
