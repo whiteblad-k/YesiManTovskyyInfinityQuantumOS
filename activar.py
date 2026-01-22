@@ -1,24 +1,95 @@
+import os
 import requests
+import time
 
-# Datos de activación
+# Constantes de configuración
+MAX_REINTENTOS = 3
+TIMEOUT_SEGUNDOS = 10
+BACKOFF_BASE = 2  # Base para exponential backoff
+
+# Datos de activación - usar variables de entorno para seguridad
 datos_activacion = {
-    "dispositivo": "Windows 10",
-    "usuario": "Vladyslav Yesimantovskyy",
-    "clave_cuantica": "3^6^9_INFINITY_π_SECRET_KEY"
+    "dispositivo": os.getenv("DISPOSITIVO", "Windows 10"),
+    "usuario": os.getenv("USUARIO", "Vladyslav Yesimantovskyy"),
+    "clave_cuantica": os.getenv("QUANTUM_SECRET_KEY", "3^6^9_INFINITY_π_SECRET_KEY")
 }
 
-# URL del servidor cuántico (reemplázala con la correcta)
-url_activacion = "https://yesimantovskyy-quantum-network.com/activar"
+# URL del servidor cuántico (usar variable de entorno)
+url_activacion = os.getenv(
+    "QUANTUM_SERVER_URL",
+    "https://yesimantovskyy-quantum-network.com/activar"
+)
 
-try:
-    # Enviar los datos al servidor cuántico
-    response = requests.post(url_activacion, json=datos_activacion)
+def activar_con_reintentos():
+    """
+    Intenta activar el sistema con reintentos y exponential backoff.
     
-    # Verificar la respuesta del servidor
-    if response.status_code == 200:
-        print("✅ Activación completada y registrada en la red cuántica.")
-    else:
-        print(f"❌ Error en la activación. Código de estado: {response.status_code}")
+    Returns:
+        bool: True si la activación fue exitosa, False en caso contrario.
+    """
+    for intento in range(1, MAX_REINTENTOS + 1):
+        try:
+            print(f"🔄 Intento {intento} de {MAX_REINTENTOS}...")
+            
+            # Enviar los datos al servidor cuántico con timeout
+            response = requests.post(
+                url_activacion,
+                json=datos_activacion,
+                timeout=TIMEOUT_SEGUNDOS
+            )
+            
+            # Verificar la respuesta del servidor usando raise_for_status
+            response.raise_for_status()
+            
+            # Verificar código de éxito específicamente
+            if response.status_code == 200:
+                print("✅ Activación completada y registrada en la red cuántica.")
+                return True
+            elif 200 <= response.status_code < 300:
+                print(f"✅ Activación exitosa. Código: {response.status_code}")
+                return True
+            else:
+                print(f"⚠️  Respuesta inesperada. Código: {response.status_code}")
+                
+        except requests.exceptions.Timeout:
+            print(f"⏱️  Timeout al conectarse al servidor (intento {intento})")
+            
+        except requests.exceptions.ConnectionError as e:
+            print(f"🔌 Error de conexión (intento {intento}): {e}")
+            
+        except requests.exceptions.HTTPError as e:
+            print(f"❌ Error HTTP (intento {intento}): {e}")
+            # No reintentar en errores 4xx (errores del cliente)
+            if 400 <= e.response.status_code < 500:
+                print("❌ Error del cliente. No se reintentará.")
+                return False
+                
+        except requests.exceptions.RequestException as e:
+            print(f"❌ Error en la petición (intento {intento}): {e}")
+            
+        except Exception as e:
+            print(f"⚠️  Error inesperado (intento {intento}): {e}")
+        
+        # Esperar antes del siguiente intento (exponential backoff)
+        if intento < MAX_REINTENTOS:
+            espera = BACKOFF_BASE ** intento
+            print(f"⏳ Esperando {espera} segundos antes del siguiente intento...")
+            time.sleep(espera)
+    
+    print("❌ No se pudo completar la activación después de todos los intentos.")
+    return False
 
-except Exception as e:
-    print(f"⚠️ Error al conectarse al servidor cuántico: {e}")
+
+# Ejecutar activación si se ejecuta como script principal
+if __name__ == "__main__":
+    # Verificar que las credenciales están configuradas
+    if datos_activacion["clave_cuantica"] == "3^6^9_INFINITY_π_SECRET_KEY":
+        print("⚠️  ADVERTENCIA: Usando clave cuántica por defecto.")
+        print("💡 Tip: Configura QUANTUM_SECRET_KEY en el archivo .env")
+    
+    # Ejecutar activación con reintentos
+    exito = activar_con_reintentos()
+    
+    # Salir con código de estado apropiado
+    import sys
+    sys.exit(0 if exito else 1)

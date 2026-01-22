@@ -9,6 +9,25 @@ import os
 import sys
 from datetime import datetime
 
+# Cache de variables de entorno para evitar lookups repetidos
+_env_cache = {}
+
+
+def _get_env(key, default=None):
+    """
+    Obtiene una variable de entorno con caché para evitar lookups repetidos.
+    
+    Args:
+        key: Nombre de la variable de entorno
+        default: Valor por defecto si no existe
+    
+    Returns:
+        str: Valor de la variable de entorno
+    """
+    if key not in _env_cache:
+        _env_cache[key] = os.getenv(key, default)
+    return _env_cache[key]
+
 
 def verificar_entorno():
     """
@@ -28,7 +47,7 @@ def verificar_entorno():
     variables_faltantes = []
     
     for var in variables_requeridas:
-        if not os.getenv(var):
+        if not _get_env(var):
             variables_faltantes.append(var)
     
     if variables_faltantes:
@@ -46,9 +65,9 @@ def mostrar_info_sistema():
     print("🚀 YesiMan Tovskyy Infinity Quantum OS")
     print("="*60)
     print(f"📅 Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"💻 Dispositivo: {os.getenv('DISPOSITIVO', 'No configurado')}")
-    print(f"👤 Usuario: {os.getenv('USUARIO', 'No configurado')}")
-    print(f"🌍 Entorno: {os.getenv('ENV', 'development')}")
+    print(f"💻 Dispositivo: {_get_env('DISPOSITIVO', 'No configurado')}")
+    print(f"👤 Usuario: {_get_env('USUARIO', 'No configurado')}")
+    print(f"🌍 Entorno: {_get_env('ENV', 'development')}")
     print(f"🐍 Python: {sys.version.split()[0]}")
     print("="*60 + "\n")
 
@@ -64,8 +83,8 @@ def ejecutar_diagnostico():
         "Python": sys.version.split()[0],
         "Sistema Operativo": os.name,
         "Variables de entorno": "✅" if env_ok else "❌",
-        "Modo Debug": os.getenv("DEBUG", "False"),
-        "Nivel de Log": os.getenv("LOG_LEVEL", "INFO"),
+        "Modo Debug": _get_env("DEBUG", "False"),
+        "Nivel de Log": _get_env("LOG_LEVEL", "INFO"),
     }
     
     print("📊 Resultados del Diagnóstico:")
@@ -77,7 +96,11 @@ def ejecutar_diagnostico():
 
 def menu_principal():
     """Muestra el menú principal del sistema."""
-    while True:
+    max_intentos = 1000  # Límite de seguridad para evitar loops infinitos
+    intentos = 0
+    
+    while intentos < max_intentos:
+        intentos += 1
         print("\n🎯 Menú Principal")
         print("-" * 40)
         print("1. Mostrar información del sistema")
@@ -103,8 +126,14 @@ def menu_principal():
         except KeyboardInterrupt:
             print("\n\n👋 Operación cancelada. ¡Hasta pronto!")
             sys.exit(0)
+        except EOFError:
+            print("\n\n👋 Entrada cerrada. ¡Hasta pronto!")
+            sys.exit(0)
         except Exception as e:
             print(f"\n❌ Error: {e}")
+    
+    print("\n⚠️  Límite de intentos alcanzado. Saliendo del sistema...")
+    sys.exit(1)
 
 
 def main():
@@ -113,10 +142,18 @@ def main():
         # Cargar variables de entorno si existe .env
         try:
             from dotenv import load_dotenv
-            load_dotenv()
+            
+            # Verificar que el archivo .env existe antes de cargarlo
+            env_file = os.path.join(os.path.dirname(__file__), '.env')
+            if os.path.exists(env_file):
+                load_dotenv(env_file)
+            else:
+                print("💡 Tip: Crea un archivo .env basado en .env.example para configurar variables de entorno")
         except ImportError:
             print("💡 Tip: Instala python-dotenv para cargar variables de entorno automáticamente")
             print("   Ejecuta: pip install python-dotenv\n")
+        except OSError as e:
+            print(f"⚠️  Error al cargar archivo .env: {e}\n")
         
         # Mostrar información inicial
         mostrar_info_sistema()
@@ -133,6 +170,9 @@ def main():
         # Mostrar menú principal
         menu_principal()
         
+    except KeyboardInterrupt:
+        print("\n\n👋 Operación cancelada. ¡Hasta pronto!")
+        sys.exit(0)
     except Exception as e:
         print(f"\n❌ Error crítico: {e}")
         sys.exit(1)
