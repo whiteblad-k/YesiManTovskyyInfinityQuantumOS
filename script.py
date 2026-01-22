@@ -96,7 +96,9 @@ def ejecutar_diagnostico():
 
 def menu_principal():
     """Muestra el menú principal del sistema."""
-    max_intentos = 1000  # Límite de seguridad para evitar loops infinitos
+    # Límite de seguridad para evitar loops infinitos
+    # Puede configurarse con variable de entorno
+    max_intentos = int(os.getenv("MENU_MAX_ITERATIONS", "100"))
     intentos = 0
 
     while intentos < max_intentos:

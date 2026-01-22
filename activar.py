@@ -1,4 +1,5 @@
 import os
+import sys
 import requests
 import time
 
@@ -35,15 +36,9 @@ def activar_con_reintentos():
             # Verificar la respuesta del servidor usando raise_for_status
             response.raise_for_status()
 
-            # Verificar código de éxito específicamente
-            if response.status_code == 200:
-                print("✅ Activación completada y registrada en la red cuántica.")
-                return True
-            elif 200 <= response.status_code < 300:
-                print(f"✅ Activación exitosa. Código: {response.status_code}")
-                return True
-            else:
-                print(f"⚠️  Respuesta inesperada. Código: {response.status_code}")
+            # Si llegamos aquí, la respuesta fue exitosa (2xx)
+            print(f"✅ Activación completada. Código: {response.status_code}")
+            return True
 
         except requests.exceptions.Timeout:
             print(f"⏱️  Timeout al conectarse al servidor (intento {intento})")
@@ -85,6 +80,4 @@ if __name__ == "__main__":
     exito = activar_con_reintentos()
 
     # Salir con código de estado apropiado
-    import sys
-
     sys.exit(0 if exito else 1)
